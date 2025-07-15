@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:15.4
+    container_name: prg_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: always
+
+  polarag_backend:
+    container_name: prg_back
+    build: ./backend/web/.
+    env_file: .env
+    volumes:
+      - ./web_entrypoint.sh:/entrypoint.sh
+    command: [ "bash", "/entrypoint.sh" ]
+    stdin_open: true
+    tty: true
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+
+  polarag_frontend:
+    container_name: prg_front
+    build: ./frontend/web-front/.
+    volumes:
+      - ./web_front_entrypoint.sh:/entrypoint.sh
+    command: [ "sh", "-c", "bash /entrypoint.sh" ]
+    restart: always
+    ports:
+      - 3000:3000
+
+volumes:
+  postgres_data:
+
