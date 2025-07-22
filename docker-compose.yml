@@ -30,6 +30,9 @@ services:
 
   polarag_frontend:
     container_name: prg_front
+    environment:
+      - NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
+      - NEXT_PUBLIC_BACKEND_PORT=${NEXT_PUBLIC_BACKEND_PORT}
     build: ./frontend/web-front/.
     volumes:
       - ./web_front_entrypoint.sh:/entrypoint.sh
@@ -62,4 +65,3 @@ configs:
   qdrant_config:
     content: |
       log_level: INFO
-
