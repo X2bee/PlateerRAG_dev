@@ -4,4 +4,4 @@ RUN apt-get update && apt-get install -y git
 
 WORKDIR /home/plateerag
 
-EXPOSE 3023
+EXPOSE ${NEXT_PUBLIC_FRONTEND_PORT}

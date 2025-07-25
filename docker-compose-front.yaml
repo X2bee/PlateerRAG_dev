@@ -1,0 +1,13 @@
+services: 
+  polarag_frontend:
+    container_name: prg_front
+    environment:
+      - NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
+    build: ./frontend/web-front/.
+    volumes:
+      - ./web_front_entrypoint.sh:/entrypoint.sh
+      - ./prg_front:/home/plateerag
+    command: [ "sh", "-c", "bash /entrypoint.sh" ]
+    restart: always
+    ports:
+      - ${NEXT_PUBLIC_FRONTEND_PORT}:3000

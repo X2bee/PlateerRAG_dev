@@ -31,10 +31,11 @@ else
 fi
 
 cd /home/plateerag
+echo NEXT_PUBLIC_BACKEND_HOST=$NEXT_PUBLIC_BACKEND_HOST > ./.env
+# echo NEXT_PUBLIC_BACKEND_PORT=8000 > ./.env
 set -e
 
-echo NEXT_PUBLIC_BACKEND_HOST=$NEXT_PUBLIC_BACKEND_HOST > ./.env
-echo NEXT_PUBLIC_BACKEND_PORT=$NEXT_PUBLIC_BACKEND_PORT > ./.env
+
 
 echo "📥 Installing dependencies..."
 npm install
