@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
       - 6543:5432
@@ -19,6 +19,7 @@ services:
     env_file: .env
     volumes:
       - ./web_entrypoint.sh:/entrypoint.sh
+      - ./prg_back:/home/plateerag
     command: [ "bash", "/entrypoint.sh" ]
     stdin_open: true
     tty: true
@@ -36,6 +37,7 @@ services:
     build: ./frontend/web-front/.
     volumes:
       - ./web_front_entrypoint.sh:/entrypoint.sh
+      - ./prg_front:/home/plateerag
     command: [ "sh", "-c", "bash /entrypoint.sh" ]
     restart: always
     ports:
