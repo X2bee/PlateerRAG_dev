@@ -45,7 +45,7 @@ case $COMMAND in
         ;;
     restart)
         echo "🔄 Docker Compose를 재시작합니다..."
-        docker compose $COMPOSE_FILES down
+        docker compose $COMPOSE_FILES down -v
         docker compose $COMPOSE_FILES up -d
         ;;
     logs)

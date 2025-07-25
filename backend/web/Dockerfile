@@ -1,11 +1,34 @@
 FROM python:3.12.11
 
+ARG RUNNER_VERSION="2.326.0"
+ARG TARGETARCH=x64
+
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y curl tar git \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g pm2
 
-RUN mkdir /polarag_backend
+RUN useradd -m runner
+
+RUN mkdir -p /polarag_backend /actions-runner && \
+    chown -R runner:runner /polarag_backend /actions-runner
+
+USER runner
+
+RUN cd /actions-runner && \
+    curl -o runner.tar.gz -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${RUNNER_VERSION}.tar.gz && \
+    tar xzf ./runner.tar.gz && rm runner.tar.gz
+
 WORKDIR /polarag_backend
+
+RUN git clone -b deploy https://github.com/X2bee/PlateeRAG_backend ./
+RUN pip install --no-cache-dir -r requirements.txt
+
 RUN python3 -m pip install --upgrade pip setuptools
 
-EXPOSE ${NEXT_PUBLIC_BACKEND_PORT}
+COPY --chown=runner:runner ./entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
+
+CMD ["/polarag_backend/entrypoint.sh"]

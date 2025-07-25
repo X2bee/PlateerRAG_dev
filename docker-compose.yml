@@ -17,10 +17,9 @@ services:
     container_name: prg_back
     build: ./backend/web/.
     env_file: .env
-    volumes:
-      - ./web_entrypoint.sh:/entrypoint.sh
-      - ./prg_back:/home/plateerag
-    command: [ "bash", "/entrypoint.sh" ]
+    environment:
+      - REPO_URL=https://github.com/X2bee/PlateeRAG_backend
+      - ACCESS_TOKEN=${BACKEND_RUNNER_TOKEN}
     stdin_open: true
     tty: true
     restart: always

@@ -1,13 +1,14 @@
 services: 
   polarag_frontend:
-    container_name: prg_front
+    container_name: polarag_frontend
     environment:
       - NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
-    build: ./frontend/web-front/.
-    volumes:
-      - ./web_front_entrypoint.sh:/entrypoint.sh
-      - ./prg_front:/home/plateerag
-    command: [ "sh", "-c", "bash /entrypoint.sh" ]
+      - REPO_URL=https://github.com/X2bee/PlateeRAG
+      - ACCESS_TOKEN=${FRONTEND_RUNNER_TOKEN}
+    build: 
+      context: ./frontend/web-front/.
+      args:
+        RUNNER_VERSION: 2.326.0
     restart: always
     ports:
       - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
