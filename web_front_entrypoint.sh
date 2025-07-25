@@ -1,4 +1,9 @@
 #!/bin/bash
+
+set -a
+source ./.env
+set +a
+
 cd /home/plateerag
 
 if ! command -v git &> /dev/null; then
@@ -27,9 +32,15 @@ fi
 
 cd /home/plateerag
 set -e
+
+echo NEXT_PUBLIC_BACKEND_HOST=$NEXT_PUBLIC_BACKEND_HOST > ./.env
+echo NEXT_PUBLIC_BACKEND_PORT=$NEXT_PUBLIC_BACKEND_PORT > ./.env
+
 echo "📥 Installing dependencies..."
 npm install
 
 echo "✅ Setup complete"
 echo "🚀 Starting the app..."
-npm run dev
+npm run build:embed
+npm run build
+npm start

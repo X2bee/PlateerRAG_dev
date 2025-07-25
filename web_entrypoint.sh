@@ -29,4 +29,6 @@ cd /plateerag_backend
 echo "필수 패키지를 설치합니다..."
 pip install -r requirements.txt
 
-python3 main.py
+echo APP_PORT=$NEXT_PUBLIC_BACKEND_PORT > ./.env
+
+python3 main.py 

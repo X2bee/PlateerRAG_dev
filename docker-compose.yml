@@ -10,7 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
-      - "5432:5432"
+      - 6543:5432
     restart: always
 
   polarag_backend:
@@ -24,7 +24,7 @@ services:
     tty: true
     restart: always
     ports:
-      - 8000:8000
+      - ${NEXT_PUBLIC_BACKEND_PORT}:8000
     depends_on:
       - postgres
 
@@ -39,7 +39,7 @@ services:
     command: [ "sh", "-c", "bash /entrypoint.sh" ]
     restart: always
     ports:
-      - 3000:3000
+      - ${NEXT_PUBLIC_FRONTEND_PORT}:3000
 
   qdrant:
     image: qdrant/qdrant:latest
