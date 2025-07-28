@@ -76,6 +76,7 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+    entrypoint: ["/vllm/entrypoint.sh"]
     volumes:
       - ./vllm:/vllm
 
