@@ -11,18 +11,18 @@ services:
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
-    restart: always
+    restart: unless-stopped
 
   polarag_backend:
     container_name: prg_back
-    build: ./backend/web/.
+    build: ./backend/.
     env_file: .env
     volumes:
       - ./web_entrypoint.sh:/entrypoint.sh
     command: [ "bash", "/entrypoint.sh" ]
     stdin_open: true
     tty: true
-    restart: always
+    restart: unless-stopped
     ports:
       - 8000:8000
     depends_on:
@@ -33,17 +33,17 @@ services:
     environment:
       - NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
       - NEXT_PUBLIC_BACKEND_PORT=${NEXT_PUBLIC_BACKEND_PORT}
-    build: ./frontend/web-front/.
+    build: ./frontend/.
     volumes:
       - ./web_front_entrypoint.sh:/entrypoint.sh
     command: [ "sh", "-c", "bash /entrypoint.sh" ]
-    restart: always
+    restart: unless-stopped
     ports:
       - 3000:3000
 
   qdrant:
     image: qdrant/qdrant:latest
-    restart: always
+    restart: unless-stopped
     container_name: qdrant
     ports:
       - ${QDRANT_HTTP_PORT}:${QDRANT_HTTP_PORT}
@@ -57,6 +57,27 @@ services:
         target: ${QDRANT_CONFIG_PATH}
     volumes:
       - ./qdrant_data:/qdrant/storage
+
+  vllm:
+    image: vllm/vllm-openai:latest
+    restart: unless-stopped
+    container_name: vllm
+    env_file: .env
+    ports:
+      - ${VLLM_PORT}:${VLLM_PORT}
+      - ${VLLM_CONTROLLER_PORT}:${VLLM_CONTROLLER_PORT}
+    expose:
+      - ${VLLM_PORT}
+      - ${VLLM_CONTROLLER_PORT}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./vllm:/vllm
 
 volumes:
   postgres_data:
