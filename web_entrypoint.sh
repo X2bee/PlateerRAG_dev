@@ -26,7 +26,11 @@ else
 fi
 
 cd /plateerag_backend
-echo "필수 패키지를 설치합니다..."
-pip install -r requirements.txt
+python --version
 
-python3 main.py
+echo "필수 패키지를 설치합니다..."
+pip install uv
+
+uv sync
+
+uv run python3 main.py
