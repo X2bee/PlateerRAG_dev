@@ -24,9 +24,9 @@ RUN cd /actions-runner && \
 WORKDIR /polarag_backend
 
 RUN git clone -b deploy https://github.com/X2bee/PlateeRAG_backend ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install uv
 
-RUN python3 -m pip install --upgrade pip setuptools
+RUN uv sync
 
 COPY --chown=runner:runner ./entrypoint.sh .
 RUN chmod +x ./entrypoint.sh
