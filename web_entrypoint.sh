@@ -33,4 +33,4 @@ pip install uv
 
 uv sync
 
-uv run python3 main.py
+uv run main.py
