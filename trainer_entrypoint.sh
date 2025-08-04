@@ -40,10 +40,8 @@ else
   cd ..
 fi
 
-# requirements.txt 설치 (가상환경 내)
 echo "필수 패키지를 설치합니다..."
 pip install -r /app/trainer/requirements.txt
 
-# train_api.py 실행 (가상환경 내)
-echo "train_api.py 실행합니다..."
+echo "Run Trainer - main.py"
 python /app/trainer/main.py
