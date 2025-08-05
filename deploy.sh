@@ -46,7 +46,7 @@ case $COMMAND in
     restart)
         echo "🔄 Docker Compose를 재시작합니다..."
         docker compose $COMPOSE_FILES down -v
-        docker compose $COMPOSE_FILES up -d
+        docker compose $COMPOSE_FILES up -d --build
         ;;
     logs)
         # ✅ 서비스 이름은 세 번째 인자로 받습니다.

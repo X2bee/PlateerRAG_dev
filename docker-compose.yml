@@ -25,6 +25,8 @@ services:
     restart: always
     ports:
       - ${NEXT_PUBLIC_BACKEND_PORT}:8000
+    volumes:
+      - ./backend/downloads:/polarag_backend/downloads
     depends_on:
       - postgres
 

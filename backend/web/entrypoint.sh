@@ -13,4 +13,4 @@ trap 'cleanup; exit 143' TERM
 
 /actions-runner/run.sh &
 
-pm2 start "uv run main.py " --name "backend" --no-daemon
+pm2 start "uv run python main.py " --name "backend" --no-daemon
