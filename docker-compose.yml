@@ -17,6 +17,7 @@ services:
     container_name: prg_trainer
     image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel
     shm_size: 32g
+    env_file: .env
     deploy:
       resources:
         reservations:
