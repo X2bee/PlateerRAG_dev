@@ -32,4 +32,7 @@ npm install
 
 echo "✅ Setup complete"
 echo "🚀 Starting the app..."
-npm run dev
+if ! npm run dev; then
+  echo "앱 실행 실패. 컨테이너를 유지하기 위해 대기 모드로 전환합니다..."
+  tail -f /dev/null
+fi
