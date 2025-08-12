@@ -8,4 +8,4 @@ RUN mkdir /polarag_backend
 WORKDIR /polarag_backend
 RUN python3 -m pip install --upgrade pip setuptools
 
-EXPOSE 8080
+EXPOSE 8000
