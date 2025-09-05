@@ -37,6 +37,15 @@ services:
     container_name: prg_backend
     build: ./backend/.
     env_file: .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - ./web_entrypoint.sh:/entrypoint.sh
     command: [ "bash", "/entrypoint.sh" ]

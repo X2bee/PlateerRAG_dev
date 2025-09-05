@@ -2,7 +2,7 @@ FROM python:3.12.11
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git ffmpeg espeak-ng
 
 RUN mkdir /polarag_backend
 WORKDIR /polarag_backend
