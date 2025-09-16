@@ -90,7 +90,7 @@ services:
       - ./qdrant_data:/qdrant/storage
 
   vllm:
-    image: vllm/vllm-openai:latest
+    build: ./vllm/.
     restart: unless-stopped
     container_name: vllm
     env_file: .env
@@ -108,8 +108,6 @@ services:
               count: all
               capabilities: [gpu]
     entrypoint: ["/vllm/entrypoint.sh"]
-    volumes:
-      - ./vllm:/vllm
 
 volumes:
   postgres_data:
