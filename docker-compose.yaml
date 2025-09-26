@@ -109,6 +109,11 @@ services:
               capabilities: [gpu]
     entrypoint: ["/vllm/entrypoint.sh"]
 
+  mcp_station:
+    build: ./mcp_station/.
+    container_name: mcp_station
+    restart: unless-stopped
+
 volumes:
   postgres_data:
 
