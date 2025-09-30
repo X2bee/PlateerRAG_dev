@@ -1,16 +1,24 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
-/actions-runner/config.sh --url "${REPO_URL}" --token "${ACCESS_TOKEN}" --name "backend-runner-$(hostname)" --work "/actions-runner/_work" --unattended --replace
+: "${REPO_URL:?REPO_URL required}"
+RUNNER_DIR=/actions-runner
+RUNNER_WORK="${RUNNER_DIR}/_work"
+RUNNER_NAME="${RUNNER_NAME:-backend-runner-$(hostname)}"
 
-cleanup() {
-    echo "Deregistering runner..."
-    /actions-runner/config.sh remove --token "${ACCESS_TOKEN}"
-}
+cd "${RUNNER_DIR}"
 
-trap 'cleanup; exit 130' INT
-trap 'cleanup; exit 143' TERM
+if [ ! -f .runner ]; then
+  : "${ACCESS_TOKEN:?ACCESS_TOKEN registration token required (one-time)}"
+  /actions-runner/config.sh --url "${REPO_URL}" \
+              --token "${ACCESS_TOKEN}" \
+              --name "${RUNNER_NAME}" \
+              --work "${RUNNER_WORK}" \
+              --unattended --replace
+fi
 
 /actions-runner/run.sh &
+
+cd "/polarag_backend"
 
 pm2 start "uv run python main.py " --name "backend" --no-daemon

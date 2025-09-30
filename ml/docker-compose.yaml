@@ -1,0 +1,39 @@
+# docker-compose.yml (volumes 추가)
+name: xgenml
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xgenml-runner:latest
+    container_name: xgenml-runner-app
+    env_file: [.env]
+    environment:
+      REPO_URL: ${REPO_URL}
+      ACCESS_TOKEN: ${ACCESS_TOKEN}
+      RUNNER_NAME: ${RUNNER_NAME:-xgenml-runner}
+      ARTIFACT_BASE_URI: ${ARTIFACT_BASE_URI}
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      PORT: ${PORT}
+    volumes:
+      - app_artifacts:/data/artifacts
+      - xgenml_code:/xgenml  # ⭐ 코드 영속성 확보
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "${PORT}:8001"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8001/openapi.json"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    profiles: ["default"]
+
+volumes:
+  app_artifacts:
+  xgenml_code:  # ⭐ 추가
