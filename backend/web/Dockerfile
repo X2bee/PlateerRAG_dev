@@ -1,6 +1,4 @@
 FROM python:3.12.11
-
-ARG RUNNER_VERSION="2.326.0"
 ARG TARGETARCH=x64
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,16 +14,11 @@ RUN apt-get update && apt-get install -y curl tar git poppler-utils \
 
 RUN useradd -m runner
 
-RUN mkdir -p /polarag_backend /actions-runner && \
-    chown -R runner:runner /polarag_backend /actions-runner
+RUN chown -R runner:runner /polarag_backend
 
 USER runner
 
 ENV PATH="/home/runner/.local/bin:${PATH}"
-
-RUN cd /actions-runner && \
-    curl -o runner.tar.gz -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${RUNNER_VERSION}.tar.gz && \
-    tar xzf ./runner.tar.gz && rm runner.tar.gz
 
 WORKDIR /polarag_backend
 
