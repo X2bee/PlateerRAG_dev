@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y curl tar git && npm install -g pm2
 
 RUN useradd -m runner
 
-RUN chown -R runner:runner /home/plateerag
+RUN mkdir -p /home/plateerag /actions-runner && \
+    chown -R runner:runner /home/plateerag
 
 USER runner
 

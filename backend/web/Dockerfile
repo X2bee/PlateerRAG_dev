@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y curl tar git poppler-utils \
 
 RUN useradd -m runner
 
-RUN chown -R runner:runner /polarag_backend
+RUN mkdir -p /polarag_backend && \
+    chown -R runner:runner /polarag_backend
 
 USER runner
 
