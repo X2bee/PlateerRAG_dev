@@ -17,10 +17,18 @@ services:
     container_name: prg_back
     build: ./backend/web/.
     env_file: .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     environment:
       - REPO_URL=https://github.com/X2bee/PlateeRAG_backend
       - ACCESS_TOKEN=${BACKEND_RUNNER_TOKEN}
       - DOCUMENTS_BASE_DIR=/polarag_backend/downloads
+      - NVIDIA_VISIBLE_DEVICES=all
     stdin_open: true
     tty: true
     restart: always
