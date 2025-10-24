@@ -12,6 +12,27 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: unless-stopped
+
+  polarag_trainer:
+    container_name: prg_trainer
+    image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel
+    shm_size: 128g
+    env_file: .env
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./trainer_entrypoint.sh:/app/entrypoint.sh
+    ports:
+      - ${TRAINER_PORT}:${TRAINER_PORT}
+    working_dir: /app
+    command: [ "bash", "/app/entrypoint.sh" ]
   polarag_backend:
     container_name: prg_backend
     build: ./backend/.
@@ -67,7 +88,34 @@ services:
         target: ${QDRANT_CONFIG_PATH}
     volumes:
       - ./qdrant_data:/qdrant/storage
-      
+
+  vllm:
+    build: ./vllm/.
+    restart: unless-stopped
+    container_name: vllm
+    env_file: .env
+    ports:
+      - ${VLLM_PORT}:${VLLM_PORT}
+      - ${VLLM_CONTROLLER_PORT}:${VLLM_CONTROLLER_PORT}
+    expose:
+      - ${VLLM_PORT}
+      - ${VLLM_CONTROLLER_PORT}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    entrypoint: ["/vllm/entrypoint.sh"]
+
+  mcp_station:
+    build: ./mcp_station/.
+    container_name: mcp_station_xgen
+    restart: unless-stopped
+    ports:
+      - 20100:20100
+
 volumes:
   postgres_data:
 
